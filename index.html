@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xe Máy Của Bạn - Mua Bán Xe Máy, Xe Điện</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons (cho ngôi sao đánh giá) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- TÙY CHỈNH CSS --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Màu nền trắng xám nhẹ */
+        }
+
+        /* Màu sắc chủ đạo */
+        :root {
+            --gradient-blue: linear-gradient(90deg, #0d6efd, #00c6ff); /* Gradient xanh dương */
+            --primary-blue: #0d6efd;
+            --accent-red: #dc3545;
+            --text-white: #ffffff;
+        }
+
+        /* Thanh điều hướng */
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-custom {
+            background-image: var(--gradient-blue);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            font-weight: 500;
+        }
+
+        .nav-link.active-page {
+            font-weight: 700;
+            border-bottom: 2px solid var(--text-white);
+        }
+
+        /* Carousel */
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .carousel-item img {
+                height: 300px;
+            }
+        }
+
+        .carousel-caption h5 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Thẻ sản phẩm */
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden; /* Để bo góc cho ảnh */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-card img {
+            border-radius: 15px 15px 0 0;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        
+        .product-card .card-body {
+            cursor: pointer;
+        }
+
+        .product-card .card-title {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .product-card .card-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-red); /* Màu đỏ cho giá */
+        }
+
+        .badge-featured {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-red) !important;
+            font-size: 0.9rem;
+            padding: 0.5em 0.75em;
+        }
+
+        /* Trang sản phẩm */
+        .filter-sidebar {
+            background-color: var(--text-white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .filter-sidebar h5 {
+            font-weight: 700;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 10px;
+        }
+
+        /* Trang Đăng nhập/Đăng ký */
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: var(--text-white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-container h2 {
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-blue);
+            border: none;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            padding: 0.75rem;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #0b5ed7;
+        }
+
+        /* Modal Chi tiết sản phẩm */
+        .modal-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+        
+        .modal-rating .bi-star-fill {
+            color: #ffc107; /* Màu vàng */
+        }
+        
+        .modal-rating .bi-star {
+            color: #e0e0e0; /* Màu xám nhạt */
+        }
+        
+        .modal-colors .badge {
+            font-size: 1rem;
+            padding: 0.5em 0.75em;
+            margin-right: 5px;
+        }
+        
+        .btn-buy-now {
+            background-color: var(--accent-red);
+            border-color: var(--accent-red);
+            font-weight: 700;
+        }
+        
+        .btn-buy-now:hover {
+            background-color: #bb2d3b;
+            border-color: #b02a37;
+        }
+
+        /* Footer */
+        .footer-custom {
+            background-color: #343a40; /* Màu nền tối */
+            color: var(--text-white);
+            padding-top: 3rem;
+            padding-bottom: 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-custom h5 {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .footer-custom a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-custom a:hover {
+            color: var(--text-white);
+        }
+        
+        .footer-custom .social-icons a {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        /* JS Điều hướng trang */
+        .page {
+            display: none; /* Ẩn tất cả các trang */
+        }
+
+        .page.active {
+            display: block; /* Hiển thị trang đang kích hoạt */
+        }
+        
+    </style>
+</head>
+<body class="container">
+
+    <!-- ======================= THANH ĐIỀU HƯỚNG (NAVBAR) ======================= -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+            <div class="container">
+                <a class="navbar-brand navbar-brand-custom" href="#" data-page="page-home">
+                    <i class="bi bi-bicycle"></i>
+                    Xe Máy Tuấn Kiệt
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active-page" href="#" data-page="page-home">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-page="page-products">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-page="page-login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-page="page-register">Đăng ký</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- ======================= TRANG CHỦ ======================= -->
+        <section id="page-home" class="page active">
+            
+            <!-- Carousel (Slide ảnh) -->
+            <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators p-1">
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="./images/banner.png" class="d-block w-100" alt="Xe máy mới">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Khám Phá Xe Số Mới Nhất</h5>
+                            <p>Công nghệ đột phá, tiết kiệm nhiên liệu.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="./images//banner2.png" class="d-block w-100" alt="Xe tay ga">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Xe Tay Ga Đẳng Cấp</h5>
+                            <p>Thiết kế thời thượng, vận hành êm ái.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="./images/banner3.png" class="d-block w-100" alt="Xe điện">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Xe Điện Vì Tương Lai Xanh</h5>
+                            <p>Bảo vệ môi trường, chi phí vận hành thấp.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <!-- Sản phẩm nổi bật -->
+            <div class="container mt-5">
+                <h2 class="text-center mb-4" style="font-weight: 700; color: var(--primary-blue);">Sản Phẩm Nổi Bật</h2>
+                <div class="row g-4" id="featured-products-list">
+                    <!-- Sản phẩm nổi bật sẽ được chèn vào đây bằng JS -->
+                    <!-- Ví dụ mẫu 1 sản phẩm -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card product-card" data-product-id="1" data-bs-toggle="modal" data-bs-target="#productModal">
+                            <span class="badge badge-featured">Nổi bật</span>
+                            <img src="https://placehold.co/400x300/EFEFEF/333?text=Honda+Vision" class="card-img-top" alt="Honda Vision">
+                            <div class="card-body">
+                                <h5 class="card-title">Honda Vision 2025</h5>
+                                <p class="card-text text-muted">110cc | Tay ga</p>
+                                <p class="card-price">35.000.000đ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ví dụ mẫu 2 sản phẩm -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card product-card" data-product-id="2" data-bs-toggle="modal" data-bs-target="#productModal">
+                            <span class="badge badge-featured">Nổi bật</span>
+                            <img src="https://placehold.co/400x300/EFEFEF/333?text=Yamaha+Exciter" class="card-img-top" alt="Yamaha Exciter">
+                            <div class="card-body">
+                                <h5 class="card-title">Yamaha Exciter 155</h5>
+                                <p class="card-text text-muted">155cc | Côn tay</p>
+                                <p class="card-price">52.000.000đ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ví dụ mẫu 3 sản phẩm -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card product-card" data-product-id="3" data-bs-toggle="modal" data-bs-target="#productModal">
+                            <span class="badge badge-featured">Nổi bật</span>
+                            <img src="https://placehold.co/400x300/EFEFEF/333?text=Vinfast+Klara+S" class="card-img-top" alt="Vinfast Klara S">
+                            <div class="card-body">
+                                <h5 class="card-title">Vinfast Klara S (2025)</h5>
+                                <p class="card-text text-muted">Xe điện | Tự động</p>
+                                <p class="card-price">40.000.000đ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ví dụ mẫu 4 sản phẩm -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card product-card" data-product-id="4" data-bs-toggle="modal" data-bs-target="#productModal">
+                            <span class="badge badge-featured">Nổi bật</span>
+                            <img src="https://placehold.co/400x300/EFEFEF/333?text=Suzuki+Raider" class="card-img-top" alt="Suzuki Raider">
+                            <div class="card-body">
+                                <h5 class="card-title">Suzuki Raider R150</h5>
+                                <p class="card-text text-muted">150cc | Côn tay</p>
+                                <p class="card-price">51.000.000đ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Trang chủ -->
+            <div id="footer-home"></div>
+        </section>
+
+        <!-- ======================= TRANG SẢN PHẨM ======================= -->
+        <section id="page-products" class="page">
+            <div class="container-fluid mt-4">
+                <div class="row gx-4">
+                    
+                    <!-- Cột Bộ lọc (Sidebar) -->
+                    <aside class="col-lg-3">
+                        <div class="filter-sidebar sticky-top" style="top: 80px;">
+                            <h5 class="mb-3">Bộ lọc sản phẩm</h5>
+                            <form id="filter-form">
+                                <!-- Lọc theo Hãng xe -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold">Hãng xe</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="honda" id="filter-honda">
+                                        <label class="form-check-label" for="filter-honda">Honda</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="yamaha" id="filter-yamaha">
+                                        <label class="form-check-label" for="filter-yamaha">Yamaha</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="suzuki" id="filter-suzuki">
+                                        <label class="form-check-label" for="filter-suzuki">Suzuki</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="vinfast" id="filter-vinfast">
+                                        <label class="form-check-label" for="filter-vinfast">Vinfast (Xe điện)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="other" id="filter-other">
+                                        <label class="form-check-label" for="filter-other">Khác</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Lọc theo Phân khúc -->
+                                <div class="mb-4">
+                                    <h6 class="fw-bold">Phân khúc (CC)</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="50cc" id="filter-50cc">
+                                        <label class="form-check-label" for="filter-50cc">Dưới 50cc (Xe điện)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="110-175cc" id="filter-110-175cc">
+                                        <label class="form-check-label" for="filter-110-175cc">110cc - 175cc</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input filter-check" type="checkbox" value="gt175cc" id="filter-gt175cc">
+                                        <label class="form-check-label" for="filter-gt175cc">Trên 175cc</label>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="filter-apply-btn" class="btn btn-primary-custom w-100">Áp dụng lọc</button>
+                                <button type="button" id="filter-reset-btn" class="btn btn-outline-secondary w-100 mt-2">Xóa bộ lọc</button>
+                            </form>
+                        </div>
+                    </aside>
+                    
+                    <!-- Cột Danh sách sản phẩm -->
+                    <div class="col-lg-9">
+                        <h2 class="mb-4" style="font-weight: 700; color: var(--primary-blue);">Tất cả sản phẩm</h2>
+                        <div id="product-list-container" class="row g-4">
+                            <!-- Sản phẩm sẽ được chèn vào đây bằng JS -->
+                        </div>
+                        <p id="no-results-message" class="text-center text-muted fs-5" style="display: none;">Không tìm thấy sản phẩm nào phù hợp.</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Footer Trang sản phẩm -->
+            <div id="footer-products"></div>
+        </section>
+
+        <!-- ======================= TRANG ĐĂNG NHẬP ======================= -->
+        <section id="page-login" class="page">
+            <div class="container">
+                <div class="form-container">
+                    <h2>Đăng Nhập</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="login-remember">
+                            <label class="form-check-label" for="login-remember">Nhớ tôi</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom w-100">Đăng Nhập</button>
+                        <p class="text-center mt-3">
+                            Chưa có tài khoản? <a href="#" data-page="page-register" class="text-decoration-none fw-bold" style="color: var(--primary-blue);">Đăng ký ngay</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Footer Trang đăng nhập -->
+            <div id="footer-login"></div>
+        </section>
+
+        <!-- ======================= TRANG ĐĂNG KÝ ======================= -->
+        <section id="page-register" class="page">
+            <div class="container">
+                <div class="form-container">
+                    <h2>Đăng Ký Tài Khoản</h2>
+                    <form>
+                         <div class="mb-3">
+                            <label for="register-name" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="register-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-confirm-password" class="form-label">Xác nhận mật khẩu</label>
+                            <input type="password" class="form-control" id="register-confirm-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom w-100">Đăng Ký</button>
+                        <p class="text-center mt-3">
+                            Đã có tài khoản? <a href="#" data-page="page-login" class="text-decoration-none fw-bold" style="color: var(--primary-blue);">Đăng nhập</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Footer Trang đăng ký -->
+            <div id="footer-register"></div>
+        </section>
+
+    </main>
+
+    <!-- ======================= FOOTER CHUNG (Nạp bằng JS) ======================= -->
+    <!-- Đây là mẫu HTML cho Footer -->
+    <template id="footer-template">
+        <footer class="footer-custom">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <h5>
+                            <i class="bi bi-bicycle"></i>
+                            XeMáyVN
+                        </h5>
+                        <p>Chuyên cung cấp các dòng xe máy, xe máy điện chính hãng từ các thương hiệu hàng đầu. Uy tín - Chất lượng - Giá tốt.</p>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <h5>Hỗ trợ</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Câu hỏi thường gặp</a></li>
+                            <li><a href="#">Chính sách bảo hành</a></li>
+                            <li><a href="#">Hướng dẫn trả góp</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5>Sản phẩm</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#" data-page="page-products">Xe Honda</a></li>
+                            <li><a href="#" data-page="page-products">Xe Yamaha</a></li>
+                            <li><a href="#" data-page="page-products">Xe Suzuki</a></li>
+                            <li><a href="#" data-page="page-products">Xe Điện Vinfast</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5>Kết nối với chúng tôi</h5>
+                        <div class="social-icons">
+                            <a href="#"><i class="bi bi-facebook"></i></a>
+                            <a href="#"><i class="bi bi-youtube" style="color: var(--accent-red);"></i></a>
+                            <a href="#"><i class="bi bi-tiktok"></i></a>
+                            <a href="#"><i class="bi bi-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-3">
+                <div class="text-center">
+                    <p>&copy; 2025 XeMáyVN. Mọi quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </footer>
+    </template>
+    
+
+    <!-- ======================= MODAL CHI TIẾT SẢN PHẨM ======================= -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="productModalLabel">Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <img id="modal-img" src="https://placehold.co/600x400/EFEFEF/333?text=H%C3%ACnh+%E1%BA%A3nh+Xe" class="img-fluid rounded" alt="Hình ảnh sản phẩm">
+                        </div>
+                        <div class="col-md-6">
+                            <h2 id="modal-title" class="fw-bold">Tên Xe Máy</h2>
+                            <div id="modal-rating" class="mb-2 fs-5">
+                                <!-- Ngôi sao sẽ được chèn bằng JS -->
+                            </div>
+                            <p id="modal-price" class="modal-price mb-3">0đ</p>
+                            
+                            <h6 class="fw-bold">Màu sắc hiện có:</h6>
+                            <div id="modal-colors" class="mb-3">
+                                <!-- Màu sắc (badges) sẽ được chèn bằng JS -->
+                            </div>
+                            
+                            <h6 class="fw-bold">Phụ kiện đi kèm:</h6>
+                            <ul id="modal-accessories" class="list-unstyled mb-3">
+                                <!-- Phụ kiện (list items) sẽ được chèn bằng JS -->
+                            </ul>
+                            
+                            <p id="modal-description" class="text-muted">
+                                <!-- Mô tả ngắn sẽ được chèn bằng JS -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-buy-now">
+                        <i class="bi bi-cart-plus-fill"></i>
+                        Thêm vào giỏ hàng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS Bundle (Popper.js + Bootstrap JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        // --- CƠ SỞ DỮ LIỆU MẪU (MOCK DATA) ---
+        const allProducts = [
+            {
+                id: 1,
+                name: "Honda Vision 2025",
+                brand: "honda",
+                segment: "110-175cc",
+                price: "35.000.000đ",
+                rating: 5,
+                colors: ["Trắng", "Đỏ", "Xanh"],
+                accessories: ["Mũ bảo hiểm", "Gương tiêu chuẩn", "Sổ bảo hành"],
+                description: "Mẫu xe tay ga quốc dân, tiết kiệm nhiên liệu, thiết kế thanh lịch.",
+                img: "./images/vision_2025.png",
+                featured: true
+            },
+            {
+                id: 2,
+                name: "Yamaha Exciter 155",
+                brand: "yamaha",
+                segment: "110-175cc",
+                price: "52.000.000đ",
+                rating: 4,
+                colors: ["Xanh GP", "Đen Nhám", "Đỏ"],
+                accessories: ["Tem xe thể thao", "Sổ bảo hành"],
+                description: "Vua đường phố với động cơ 155cc VVA mạnh mẽ, kiểu dáng thể thao.",
+                img: "./images/YamahaExciter155.jpg",
+                featured: true
+            },
+            {
+                id: 3,
+                name: "Vinfast Klara S (2025)",
+                brand: "vinfast",
+                segment: "50cc", // Coi xe điện như phân khúc 50cc
+                price: "40.000.000đ",
+                rating: 5,
+                colors: ["Trắng", "Đen", "Xanh Rêu"],
+                accessories: ["Sạc nhanh", "Pin LFP", "Gương"],
+                description: "Xe máy điện thông minh, phạm vi di chuyển 200km, thân thiện môi trường.",
+                img: "./images/VinfastKlaraS.jpg",
+                featured: true
+            },
+            {
+                id: 4,
+                name: "Suzuki Raider R150",
+                brand: "suzuki",
+                segment: "110-175cc",
+                price: "51.000.000đ",
+                rating: 4,
+                colors: ["Xanh/Đen", "Đỏ/Đen"],
+                accessories: ["Sổ bảo hành"],
+                description: "Thiết kế hyper-underbone độc đáo, động cơ DOHC mạnh mẽ.",
+                img: "./images/SuzukiRaiderR150.jpg",
+                featured: true
+            },
+            {
+                id: 5,
+                name: "Honda Wave Alpha",
+                brand: "honda",
+                segment: "110-175cc", // 110cc
+                price: "18.000.000đ",
+                rating: 5,
+                colors: ["Xanh", "Đỏ", "Trắng"],
+                accessories: ["Gương tiêu chuẩn", "Sổ bảo hành"],
+                description: "Xe số bền bỉ, tiết kiệm xăng, chi phí vận hành thấp nhất.",
+                img: "./images/HondaWaveAlpha.png",
+                featured: false
+            },
+            {
+                id: 6,
+                name: "Yamaha Sirius Fi",
+                brand: "yamaha",
+                segment: "110-175cc", // 115cc
+                price: "21.000.000đ",
+                rating: 4,
+                colors: ["Đen", "Đỏ", "Trắng"],
+                accessories: ["Gương", "Sổ bảo hành"],
+                description: "Xe số phổ thông, thiết kế thể thao, động cơ Fi tiết kiệm.",
+                img: "./images/YamahaSiriusFi.jpg",
+                featured: false
+            },
+            {
+                id: 7,
+                name: "Honda SH 160i",
+                brand: "honda",
+                segment: "110-175cc", // 160cc
+                price: "95.000.000đ",
+                rating: 5,
+                colors: ["Đen Nhám", "Trắng", "Xám"],
+                accessories: ["Phanh ABS", "Smartkey", "Sổ bảo hành"],
+                description: "Vua tay ga, sang trọng, đẳng cấp, động cơ eSP+ mạnh mẽ.",
+                img: "./images/HondaSH160i.png",
+                featured: false
+            },
+            {
+                id: 8,
+                name: "Vinfast Evo 200",
+                brand: "vinfast",
+                segment: "50cc", // Xe điện
+                price: "22.000.000đ",
+                rating: 4,
+                colors: ["Vàng", "Đỏ", "Xanh"],
+                accessories: ["Pin LFP", "Sạc"],
+                description: "Xe điện nhỏ gọn, quãng đường 200km, phù hợp đô thị.",
+                img: "./images/VinfastEvo200.png",
+                featured: false
+            },
+            {
+                id: 9,
+                name: "Kawasaki Z1000",
+                brand: "other", // Khác (Kawasaki)
+                segment: "gt175cc", // > 175cc
+                price: "415.000.000đ",
+                rating: 5,
+                colors: ["Xanh/Đen", "Đỏ/Đen"],
+                accessories: ["Phanh ABS", "Sổ bảo hành"],
+                description: "Naked bike huyền thoại, âm thanh uy lực, thiết kế Sugomi.",
+                img: "./images/KawasakiZ1000.jpeg",
+                featured: false
+            },
+            {
+                id: 10,
+                name: "SYM Elegant 50",
+                brand: "other", // Khác (SYM)
+                segment: "50cc", // 50cc
+                price: "16.000.000đ",
+                rating: 3,
+                colors: ["Đen", "Đỏ"],
+                accessories: ["Gương", "Sổ bảo hành"],
+                description: "Xe số 50cc không cần bằng lái, phù hợp học sinh.",
+                img: "./images/SYMElegant50.png",
+                featured: false
+            }
+        ];
+
+        // --- HÀM TẠO HTML SẢN PHẨM ---
+        function createProductCardHTML(product) {
+            let featuredBadge = product.featured ? '<span class="badge badge-featured">Nổi bật</span>' : '';
+            
+            return `
+                <div class="col-12 col-md-6 col-lg-4 mb-4 product-item" data-brand="${product.brand}" data-segment="${product.segment}">
+                    <div class="card product-card h-100" data-product-id="${product.id}" data-bs-toggle="modal" data-bs-target="#productModal">
+                        ${featuredBadge}
+                        <img src="${product.img}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text text-muted">${product.segment} | ${product.brand.charAt(0).toUpperCase() + product.brand.slice(1)}</p>
+                            <p class="card-price mt-auto">${product.price}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // --- HÀM TẠO HTML SAO ĐÁNH GIÁ ---
+        function createRatingStars(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<i class="bi bi-star-fill"></i> ';
+                } else {
+                    starsHTML += '<i class="bi bi-star"></i> ';
+                }
+            }
+            return starsHTML;
+        }
+
+        // --- HÀM TẠO HTML MÀU SẮC (BADGES) ---
+        function createColorBadges(colors) {
+            // Mảng màu sắc bootstrap ngẫu nhiên
+            const badgeColors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
+            return colors.map((color, index) => {
+                let badgeClass = badgeColors[index % badgeColors.length];
+                // Xử lý màu đặc biệt
+                if (color.toLowerCase().includes('trắng')) badgeClass = 'light text-dark border';
+                if (color.toLowerCase().includes('đen')) badgeClass = 'dark';
+                if (color.toLowerCase().includes('đỏ')) badgeClass = 'danger';
+                if (color.toLowerCase().includes('xanh')) badgeClass = 'primary';
+                
+                return `<span class="badge bg-${badgeClass}">${color}</span>`;
+            }).join(' ');
+        }
+        
+        // --- HÀM TẠO HTML PHỤ KIỆN (LIST) ---
+        function createAccessoriesList(accessories) {
+            return accessories.map(item => `<li><i class="bi bi-check-circle-fill text-success me-2"></i>${item}</li>`).join('');
+        }
+        
+        
+        // --- CHẠY KHI TÀI LIỆU SẴN SÀNG ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const productListContainer = document.getElementById('product-list-container');
+            const featuredListContainer = document.getElementById('featured-products-list');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const filterApplyBtn = document.getElementById('filter-apply-btn');
+            const filterResetBtn = document.getElementById('filter-reset-btn');
+            
+            // --- 1. NẠP FOOTER VÀO TẤT CẢ CÁC TRANG ---
+            const footerTemplate = document.getElementById('footer-template').innerHTML;
+            document.getElementById('footer-home').innerHTML = footerTemplate;
+            document.getElementById('footer-products').innerHTML = footerTemplate;
+            document.getElementById('footer-login').innerHTML = footerTemplate;
+            document.getElementById('footer-register').innerHTML = footerTemplate;
+
+            // --- 2. HIỂN THỊ SẢN PHẨM (TRANG CHỦ & TRANG SẢN PHẨM) ---
+            
+            // Hàm hiển thị sản phẩm (có thể lọc)
+            function displayProducts(filters = {}) {
+                if (!productListContainer) return;
+                
+                productListContainer.innerHTML = ''; // Xóa sản phẩm cũ
+                let productsFound = 0;
+
+                const filteredProducts = allProducts.filter(product => {
+                    // Lọc Hãng
+                    const brandMatch = filters.brands && filters.brands.length > 0 
+                        ? filters.brands.includes(product.brand) 
+                        : true; // Nếu không chọn hãng nào -> hiển thị tất cả
+                        
+                    // Lọc Phân khúc
+                    const segmentMatch = filters.segments && filters.segments.length > 0
+                        ? filters.segments.includes(product.segment)
+                        : true; // Nếu không chọn phân khúc -> hiển thị tất cả
+                        
+                    return brandMatch && segmentMatch;
+                });
+
+                if (filteredProducts.length > 0) {
+                    filteredProducts.forEach(product => {
+                        productListContainer.innerHTML += createProductCardHTML(product);
+                        productsFound++;
+                    });
+                    noResultsMessage.style.display = 'none';
+                } else {
+                    noResultsMessage.style.display = 'block';
+                }
+            }
+            
+            // Hiển thị sản phẩm nổi bật (Trang chủ)
+            if (featuredListContainer) {
+                featuredListContainer.innerHTML = ''; // Xóa placeholder
+                const featuredProducts = allProducts.filter(p => p.featured);
+                featuredProducts.forEach(product => {
+                    // Sử dụng layout khác một chút cho trang chủ (col-lg-3)
+                    const cardHTML = createProductCardHTML(product).replace('col-lg-4 mb-4', 'col-lg-3');
+                    featuredListContainer.innerHTML += cardHTML;
+                });
+            }
+            
+            // Hiển thị tất cả sản phẩm ban đầu (Trang sản phẩm)
+            displayProducts();
+
+
+            // --- 3. XỬ LÝ BỘ LỌC (TRANG SẢN PHẨM) ---
+            if (filterApplyBtn) {
+                filterApplyBtn.addEventListener('click', () => {
+                    // Lấy các giá trị đã chọn
+                    const selectedBrands = Array.from(document.querySelectorAll('#filter-form input[type="checkbox"][id^="filter-honda"], #filter-form input[type="checkbox"][id^="filter-yamaha"], #filter-form input[type="checkbox"][id^="filter-suzuki"], #filter-form input[type="checkbox"][id^="filter-vinfast"], #filter-form input[type="checkbox"][id^="filter-other"]'))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+                        
+                    const selectedSegments = Array.from(document.querySelectorAll('#filter-form input[type="checkbox"][id^="filter-50cc"], #filter-form input[type="checkbox"][id^="filter-110-175cc"], #filter-form input[type="checkbox"][id^="filter-gt175cc"]'))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+                    
+                    displayProducts({
+                        brands: selectedBrands,
+                        segments: selectedSegments
+                    });
+                });
+            }
+            
+            // Xử lý nút Xóa bộ lọc
+            if (filterResetBtn) {
+                filterResetBtn.addEventListener('click', () => {
+                    document.querySelectorAll('#filter-form input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    displayProducts(); // Hiển thị lại tất cả
+                });
+            }
+
+            // --- 4. XỬ LÝ MODAL (CHI TIẾT SẢN PHẨM) ---
+            const productModal = document.getElementById('productModal');
+            if (productModal) {
+                productModal.addEventListener('show.bs.modal', (event) => {
+                    // Lấy nút đã kích hoạt modal
+                    const button = event.relatedTarget;
+                    // Lấy ID sản phẩm từ data-attribute
+                    const productId = button.closest('.product-card').dataset.productId;
+                    
+                    // Tìm sản phẩm trong CSDL
+                    const product = allProducts.find(p => p.id == productId);
+                    
+                    if (product) {
+                        // Cập nhật nội dung modal
+                        productModal.querySelector('#modal-title').textContent = product.name;
+                        productModal.querySelector('#modal-img').src = product.img.replace('400x300', '600x400'); // Lấy ảnh to hơn
+                        productModal.querySelector('#modal-price').textContent = product.price;
+                        productModal.querySelector('#modal-description').textContent = product.description;
+                        
+                        // Cập nhật sao
+                        productModal.querySelector('#modal-rating').innerHTML = createRatingStars(product.rating);
+                        
+                        // Cập nhật màu sắc
+                        productModal.querySelector('#modal-colors').innerHTML = createColorBadges(product.colors);
+                        
+                        // Cập nhật phụ kiện
+                        productModal.querySelector('#modal-accessories').innerHTML = createAccessoriesList(product.accessories);
+                    }
+                });
+            }
+
+            // --- 5. XỬ LÝ ĐIỀU HƯỚNG TRANG (SPA) ---
+            const navLinks = document.querySelectorAll('a[data-page]');
+            const pages = document.querySelectorAll('.page');
+            const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link[data-page]');
+
+            function switchPage(targetPageId) {
+                // Ẩn tất cả các trang
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                // Hiển thị trang mục tiêu
+                const targetPage = document.getElementById(targetPageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+                
+                // Cập nhật trạng thái active trên navbar
+                navbarLinks.forEach(link => {
+                    if (link.dataset.page === targetPageId) {
+                        link.classList.add('active-page');
+                    } else {
+                        link.classList.remove('active-page');
+                    }
+                });
+
+                // Cuộn lên đầu trang
+                window.scrollTo(0, 0);
+            }
+
+            // Thêm sự kiện click cho tất cả các link điều hướng (cả navbar và các link khác)
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
+                    const targetPageId = link.dataset.page;
+                    switchPage(targetPageId);
+                });
+            });
+            
+            // Xử lý khi người dùng click vào logo
+            document.querySelector('.navbar-brand[data-page]').addEventListener('click', (e) => {
+                 e.preventDefault();
+                 switchPage('page-home');
+            });
+
+        });
+    </script>
+
+</body>
+</html>
